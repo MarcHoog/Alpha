@@ -23,7 +23,7 @@ class PillReminder(commands.Cog):
         self.emoji = ['👍','👎','🛑']
         self._scheduler = AsyncIOScheduler()
         self._scheduler.start()
-        self._scheduler.add_job(self.reminder_job, CronTrigger(hour="05", minute="00", second="0"),args=[lize,])
+        self._scheduler.add_job(self.reminder_job, CronTrigger(hour="04", minute="00", second="0"),args=[lize,])
  
     # Embeds
     # Made them propertys cause it's easy :P
@@ -65,7 +65,7 @@ class PillReminder(commands.Cog):
     # The standard job that sends the reminder and opens a timeoutjob for that message
     async def reminder_job(self,user_id):
         message = await send_dm(self.bot,user_id,self.reminder,['👍','👎'])
-        future = datetime.now() + timedelta(hours=12)
+        future = datetime.now() + timedelta(hours=17)
         self._scheduler.add_job(self.timeout_job,DateTrigger(run_date=future),args=[message,])
     
     # the automatic time out job, this checks if the message needs to be timed down if the message is already deleted
@@ -114,7 +114,9 @@ class PillReminder(commands.Cog):
     # Checks if message younger then 12 hours:
     async def _verify_message_age(self,message) -> bool:
         time_delta = (datetime.utcnow() - message.created_at)
-        if time_delta.total_seconds() < 43200:
+        seconds = time_delta.total_seconds()
+        hours = seconds // 3600
+        if hours < 17:
             return True
         else:
             return False

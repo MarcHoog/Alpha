@@ -7,6 +7,12 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 
+
+# DO THE TIME ZONE THINGIE 
+RUN apt-get update -y
+RUN apt-get install -y tzdata
+ENV TZ Europe/Amsterdam
+
 # Install pip requirements
 COPY requirements.txt .
 RUN python -m pip install -r requirements.txt
